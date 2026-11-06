@@ -5,7 +5,7 @@ export const business = {
 } as const;
 
 export const suppliers = [
-    { id: 1, name: "DOANH NGHIỆP TƯ NHÂN VÀNG BẠC LIÊN XUÂN", address: "Thôn Quyết Tâm, Xã Cẩm Khê, Tỉnh Phú Thọ", standard: "TCCS 01:2024/LX", symbol: "LX"}
+    { id: 1, name: "DOANH NGHIỆP TƯ NHÂN VÀNG BẠC LIÊN XUÂN", address: "Thôn Quyết Tâm, Xã Cẩm Khê, Tỉnh Phú Thọ", standard: "TCCS 01:2024/LX", symbol: "VANG LIEN XUAN 9999"}
 ] as const;
 
 export const products = [
