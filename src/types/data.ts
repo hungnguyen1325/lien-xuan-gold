@@ -9,7 +9,7 @@ export const suppliers = [
 ] as const;
 
 export const products = [
-  { id: 1, code: "LX0.5", name: "Nhẫn ép vỉ LX 0.5 chỉ", totalWeight: "0.5", goldWeight: "0.3", stoneWeight: "0", supplierID: 1 },
+  { id: 1, code: "LX0.5", name: "Nhẫn ép vỉ LX 0.5 chỉ", totalWeight: "0.5", goldWeight: "0.5", stoneWeight: "0", supplierID: 1 },
   { id: 2, code: "LX0.3", name: "Nhẫn ép vỉ LX 0.3 chỉ", totalWeight: "0.3", goldWeight: "0.3", stoneWeight: "0", supplierID: 1 },
   { id: 3, code: "LX1", name: "Nhẫn ép vỉ LX 1 chỉ", totalWeight: "1", goldWeight: "1", stoneWeight: "0", supplierID: 1 },
   { id: 4, code: "LX2", name: "Nhẫn ép vỉ LX 2 chỉ", totalWeight: "2", goldWeight: "2", stoneWeight: "0", supplierID: 1 },
@@ -28,7 +28,7 @@ export function findSupplierId(id: number) {
     return supplier
 }
 
-export function findProduct(code: string) {
+export function findProductByCode(code: string) {
     const product = products.find((product) => product.code === code)
 
     if (!product) {

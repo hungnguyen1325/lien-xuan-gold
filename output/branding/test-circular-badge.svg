@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" fill="none">
+  <!-- Circular border ring -->
+  <circle cx="200" cy="200" r="185" stroke="#F5D05A" stroke-width="12" />
+  <circle cx="200" cy="200" r="172" stroke="#F5D05A" stroke-width="2" opacity="0.6" />
+  
+  <g transform="translate(-305, -35)" fill="#F5D05A">
+    <!-- Crown -->
+    <path d="m429 111 33 26 7-48 29 22 28-30 7 54 40-29-20 54H450Z"/>
+    <circle cx="428" cy="108" r="6"/>
+    <circle cx="574" cy="103" r="6"/>
+    <path d="M451 165Q500 153 550 165L550 173Q500 162 451 173Z"/>
+    
+    <!-- Monogram L & X -->
+    <path d="M425 232H479V240H470Q463 240 463 249V357H515Q529 357 531 337H540L536 374H424V365H437Q445 365 445 356V250Q445 240 437 240H425Z"/>
+    <path d="M444 219H511V228H501Q494 228 499 235L522 269 545 232Q547 228 539 228H529V219H577V228H566Q561 228 557 234L528 278 567 335Q572 343 580 343H587V352H519V343H529Q535 343 530 335L507 300 480 337Q476 343 485 343H497V352H446V343H457Q463 343 469 335L501 290 464 235Q459 228 449 228H444Z"/>
+  </g>
+</svg>
