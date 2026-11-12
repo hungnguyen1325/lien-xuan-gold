@@ -1,71 +1,165 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { useState } from "react";
-import type { PackagingArtwork } from "@/types/product-media";
 
 type GallerySlide = {
+  id: string;
   label: string;
-  caption: string;
-  src?: string;
-  viewBox?: string;
+  src: string;
 };
 
-const root = "/products/lien-xuan";
+const slides: GallerySlide[] = [
+  {
+    id: "angle",
+    label: "Góc nghiêng",
+    src: "/products/lien-xuan/ring-mockup-1.png",
+  },
+  {
+    id: "perspective",
+    label: "Góc xiên",
+    src: "/products/lien-xuan/ring-mockup-2.png",
+  },
+  {
+    id: "top",
+    label: "Góc thẳng",
+    src: "/products/lien-xuan/ring-mockup-3.png",
+  },
+];
 
-export default function ProductGallery({ code, packaging }: { code: string; packaging?: PackagingArtwork }) {
+export default function ProductGallery({
+  productName,
+}: {
+  productName: string;
+}) {
   const [selected, setSelected] = useState(0);
-  const slides: GallerySlide[] = [
-    { label: "Ảnh nhẫn", caption: "Ảnh mẫu nhẫn · Đã xử lý từ ảnh gốc", src: `${root}/ring-studio-v1.png` },
-    ...(packaging ? [
-      { label: "Mặt trước", caption: `Mặt trước vỉ · ${code}`, viewBox: packaging.front },
-      { label: "Mặt sau", caption: `Mặt sau vỉ · ${code}`, viewBox: packaging.back },
-    ] : []),
-  ];
-  const active = slides[selected];
+  const sliderRef = useRef<HTMLDivElement>(null);
+
+  function goToSlide(index: number) {
+    const slider = sliderRef.current;
+    if (!slider) return;
+    slider.scrollLeft = index * slider.clientWidth;
+  }
+
+  function handleScroll() {
+    const slider = sliderRef.current;
+    if (!slider?.clientWidth) return;
+    const index = Math.round(slider.scrollLeft / slider.clientWidth);
+    setSelected(Math.max(0, Math.min(index, slides.length - 1)));
+  }
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (sliderRef.current) {
+        sliderRef.current.scrollLeft = selected * sliderRef.current.clientWidth;
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [selected]);
 
   return (
-    <div className="qr-gallery">
-      <div className={`qr-galleryStage ${active.viewBox ? "qr-packagingStage" : ""}`}>
-        <GalleryImage slide={active} eager={selected === 0} />
+    <div
+      className="product-gallery grid w-full grid-cols-[minmax(0,1fr)_minmax(0,4fr)] items-start gap-3 select-none"
+      aria-label="Ảnh sản phẩm"
+    >
+      <div
+        className="flex min-w-0 flex-col gap-2"
+        role="group"
+        aria-label="Danh sách ảnh sản phẩm"
+      >
+        {slides.map((slide, idx) => {
+          const isActive = idx === selected;
+          return (
+            <button
+              key={slide.id}
+              type="button"
+              aria-pressed={isActive}
+              aria-label={slide.label}
+              title={slide.label}
+              onClick={() => goToSlide(idx)}
+              className="w-full cursor-pointer touch-manipulation rounded-lg text-center transition-transform active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            >
+              <div
+                className={`overflow-hidden rounded-lg border-2 ${isActive ? "border-accent" : "border-transparent"}`}
+              >
+                <div className="gallery-frame overflow-hidden rounded-md bg-product-photo">
+                  <GalleryImage
+                    slide={slide}
+                    productName={productName}
+                    thumbnail
+                  />
+                </div>
+              </div>
+            </button>
+          );
+        })}
       </div>
-
-      <div className="qr-thumbnails" role="group" aria-label="Chọn ảnh sản phẩm">
-        {slides.map((slide, index) => (
-          <button
-            key={slide.label}
-            type="button"
-            className="qr-thumbnail"
-            aria-label={slide.label}
-            aria-pressed={index === selected}
-            onClick={() => setSelected(index)}
+      <div className="min-w-0">
+        <div className="gallery-frame w-full overflow-hidden rounded-xl bg-product-photo">
+          <div
+            ref={sliderRef}
+            onScroll={handleScroll}
+            className="absolute inset-0 flex overflow-x-auto snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
-            <span>{slide.label}</span>
-          </button>
-        ))}
+            {slides.map((slide, idx) => (
+              <div
+                key={slide.id}
+                className="relative h-full w-full min-w-full shrink-0 snap-start snap-always"
+              >
+                <GalleryImage
+                  slide={slide}
+                  productName={productName}
+                  eager={idx === 0}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-
-      <p className="qr-imageCaption" aria-live="polite">{active.caption}</p>
     </div>
   );
 }
 
-function GalleryImage({ slide, eager = false }: { slide: GallerySlide; eager?: boolean }) {
-  if (slide.viewBox) {
-    return (
-      <svg className="qr-packagingImage" viewBox={slide.viewBox} role="img" aria-label={slide.caption}>
-        <image href={`${root}/packaging-original.png`} width="728" height="797" />
-      </svg>
-    );
-  }
+function GalleryImage({
+  slide,
+  productName,
+  thumbnail = false,
+  eager = false,
+}: {
+  slide: GallerySlide;
+  productName: string;
+  thumbnail?: boolean;
+  eager?: boolean;
+}) {
+  const [status, setStatus] = useState<"loading" | "ready" | "error">(
+    "loading",
+  );
   return (
-    <Image
-      src={slide.src!}
-      alt={slide.caption}
-      fill
-      sizes="(max-width: 760px) 90vw, 560px"
-      loading={eager ? "eager" : "lazy"}
-      className="qr-productImage"
-    />
+    <>
+      {status === "loading" && (
+        <div className="loading-shimmer absolute inset-0" aria-hidden="true" />
+      )}
+      <Image
+        src={slide.src}
+        alt={thumbnail ? "" : `${productName} - ${slide.label}`}
+        fill
+        sizes={
+          thumbnail
+            ? "(min-width: 1024px) 80px, (min-width: 640px) 76px, (max-width: 447px) calc(20vw - 11.2px), 79px"
+            : "(min-width: 1024px) 335px, (min-width: 640px) 317px, (max-width: 447px) calc(80vw - 28.8px), 330px"
+        }
+        loading={thumbnail || eager ? "eager" : "lazy"}
+        onLoad={() => setStatus("ready")}
+        onError={() => setStatus("error")}
+        draggable={false}
+        className={`pointer-events-none select-none object-contain ${status === "ready" ? "gallery-image-ready" : ""}`}
+      />
+      {status === "error" && (
+        <span className="absolute inset-0 flex items-center justify-center p-2 text-center text-xs text-accent-foreground">
+          Không tải được ảnh
+        </span>
+      )}
+    </>
   );
 }
