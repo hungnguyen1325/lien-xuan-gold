@@ -211,7 +211,7 @@ export default function ContactWidget() {
                           height={14}
                           className="rounded-xs"
                         />
-                        <span>Nhắn Zalo ({branch.phones[0].display})</span>
+                        <span>Nhắn Zalo ({branch.zaloDisplay})</span>
                       </a>
                     </div>
                   </div>

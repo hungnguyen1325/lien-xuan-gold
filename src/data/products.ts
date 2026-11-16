@@ -29,7 +29,7 @@ const suppliers = [
   {
     id: 1,
     name: business.name,
-    address: "Thôn Quyết Tâm, Xã Cẩm Khê, Tỉnh Phú Thọ",
+    address: "Số nhà 169-171, Thôn Quyết Tâm, Xã Cẩm Khê, Tỉnh Phú Thọ",
     standard: "TCCS 01:2024/LX",
     symbol: "VANG LIEN XUAN 9999",
   },

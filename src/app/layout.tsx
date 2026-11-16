@@ -14,7 +14,7 @@ const beVietnamPro = Be_Vietnam_Pro({
 export const metadata = pageMetadata({
   title: "Doanh Nghiệp Vàng Bạc Đá Quý Liên Xuân | Giữ uy tín hơn giữ vàng",
   description:
-    "Doanh nghiệp tư nhân vàng bạc Liên Xuân chuyên kinh doanh vàng ép vỉ 999.9, vàng trang sức cao cấp. Địa chỉ Thôn Quyết Tâm, Xã Cẩm Khê, Tỉnh Phú Thọ.",
+    "Doanh nghiệp tư nhân vàng bạc Liên Xuân chuyên kinh doanh vàng ép vỉ 999.9, vàng trang sức cao cấp. Địa chỉ Số nhà 169-171, Thôn Quyết Tâm, Xã Cẩm Khê, Tỉnh Phú Thọ.",
   path: "/",
 });
 
